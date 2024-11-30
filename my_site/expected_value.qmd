@@ -1,0 +1,93 @@
+---
+title: "Expected Value"
+format: html
+filters: 
+  - shinylive
+---
+
+# What are expectaions?
+Expected value in statistics is simply the value you'd expect to get if you ran an experiment a bunch of times. It's sort of interchanged with mean and first moment, but it can be thought of as a weighted average. It's the sum of the probability of an outcome times the value of the outcome for all possible outcomes. An example (by Statistics by Jim) is if a contestant on a game show has a 50% chance of winning $100, 40% chance of $500, or 10% chance of losing $100, then the expected value from a bunch of contestants playing would be:
+$$
+0.5 * 100 + 0.4 * 500 + .1 * (-100) = $240
+$$
+
+[source](https://statisticsbyjim.com/probability/expected-value/)
+
+
+# Visualize what they look like in a distribution plot
+Basic idea:
+1. user select continuous distribution (normal, gamma (which reduces to exponential, and beta? geomteric?))
+2. user select mean with slider 1
+3. user select variance with slider 2 
+4. use scipy stats to generate random variates
+5. plot the distribution
+6. output the skew and kurtosis (should be 0 and 0 for normal, more interesting for gamma, etc.)
+
+```{shinylive-python}
+#| standalone: true
+#| viewerHeight: 660
+from shiny.express import input, render, ui
+from shiny import reactive
+import pandas as pd
+from scipy.stats import norm, gamma, geom
+import plotly.express as px
+from shinywidgets import render_plotly
+
+# Show user a dropdown to select the distribution
+ui.input_select(
+    id='distribution',
+    label='Select distribution:',
+    choices=[
+        'Normal',
+        'Gamma',
+        'Geometric'
+    ],
+    selected='Normal',
+    width='200px'   
+)
+
+# Show user sliders for mean and variance
+ui.input_slider(
+    id='firstmoment',
+    label='Select the first moment: ',
+    min=0,
+    max=100,
+    value=10,
+    step=1
+)
+ui.input_slider(
+    id='secondmoment',
+    label='Select the second moment:',
+    min=0,
+    max=10,
+    value=10,
+    step=1
+)
+
+# Helper functions to generate random variates based on
+@reactive.calc
+def get_normal_data():
+    mean = input.firstmoment()
+    std_dev = input.secondmoment()
+    data = norm.rvs(loc=mean, scale=std_dev, size=1000)
+    data_df = pd.DataFrame(data, columns=['Value'])
+    skew, kurtosis = 0, 0 # always for normal distribution
+    return data_df, skew, kurtosis
+ 
+# Plot the data as histogram with fit line
+@render_plotly
+def plot_hist():
+    if input.distribution() == 'Normal':
+        # get normal data
+        data, skew, kurt = get_normal_data()
+        fig = px.histogram(data, x="Value",title="Normal Distribution", nbins=30)
+        fig.update_xaxes(range=[1,100])
+        return fig
+    if input.distribution() == 'Gamma':
+        pass
+    if input.distribtuion() == 'Geometric':
+        pass
+
+# show skew and kurtosis in value box?
+
+```

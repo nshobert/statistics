@@ -1,0 +1,152 @@
+---
+title: "Poisson Distribution"
+format: html
+filters: 
+  - shinylive
+---
+
+# The Poisson Distribution
+
+Use a Poisson distribution when you want to model how likely it is for discrete or individual events to happen in a given period of time.
+
+:::{.callout-note}
+Individual events are *discrete* and *independent*
+:::
+
+## Examples
+* queuing: (waitin lines/ queuing) - the number of people arriving in a given time period, jobs to a print queue...
+* earthquake occurence:
+* number of potholes in a length of road
+* number of gummies in a pouch of gummies
+
+## Parameters
+$\lambda$: the number of events per time period (a rate)
+
+* $\lambda$ is also the mean and the variance 
+* $\sqrt\lambda$ is the standard deviation
+
+## How to know when to use it
+We can use this to ask either:
+
+* what is the probability that exactly some number of events will occur in a given time period? (discrete) or
+* what is the probability that some number or fewer events will occur in a given time period? (cumulative)
+
+## Requirements and Assumptions
+
+* individual events cannot happen at the same time
+* individual events are independent
+* the probality that an event occurs does not depend on how long it has been since the last event.
+    
+:::{.callout-warning}
+The thrid assumption is often where the Poisson process breaks down. For example, aftershocks have a time dependence, and some evidence suggests that the probability that an earthquake occurs *does* depend on how long it has been since the last earthquake. The idea is that after an earthquake, there is a time dependence to the build up of energy needed to release another earthquake.
+:::
+
+Make sure that when applying a Poisson Distribution to a problem, 
+
+1. The rate $\lambda$ matches the time period of interest
+2. Consider whether you're interested in the probability of an event or the cumulative probability of a range of events
+3. Pay attention to whether or not you want to include or exclude the boundary value (e.g. P(X $\leq$ 3) or P(X < 3)
+
+
+## Visualize the Distribution
+the interactive plot should use a fixed time period and explore the effect of changing the rate (base rate). It would have n occurences on the x axis and P on the y axis. can be a bar plot. 
+
+We can look at the PMF to understand the probability of observing exactly *k* events in a fixed interval of time or space:
+$$
+P(X = k) = \frac{ \lambda^k e^{-\lambda}}{k!}
+$$
+
+We can look at the CDF to understand the probability of observing up to *k* events:
+$$
+F(X \leq k) = \sum_{i=0}^{k} \frac{\lambda^i e^{-\lambda}}{i!}
+$$
+
+Use the slider to change the rate λ to see its effect on the PDF and CDF:
+```{shinylive-python}
+#| standalone: true
+#| viewerHeight: 660
+from shiny.express import ui, render, input
+from shiny import reactive
+import pandas as pd
+from scipy.stats import poisson
+import plotly.express as px
+from shinywidgets import render_plotly
+
+# Set number of events in backend
+k = 20
+
+# Get lambda from user
+ui.input_slider(
+  "users_lambda",
+  "Select λ",
+  min=1,
+  max=10,
+  value=1,
+  step=1,
+  width='400px',
+  ticks=True
+)
+
+# Create a dataframe to plot
+@reactive.calc
+def make_df():
+  users_lambda = input.users_lambda()
+  df = pd.DataFrame({"Events": range(1, k + 1)})
+  df['PMF'] = df["Events"].apply(lambda x: poisson.pmf(x, users_lambda))
+  df['CDF'] = df["Events"].apply(lambda x: poisson.cdf(x, users_lambda))
+  return df
+
+# Plot the PMF and CDF
+@render_plotly
+def pmf_plot():
+  data = make_df()
+  fig = px.scatter(
+    data,
+    x='Events',
+    y='PMF',
+    title="Probability Mass Function",
+    hover_data={'PMF': ':.3f'},
+    labels={
+      "Events": "No. of Events, k",
+      "PMF": "P (X = k)"
+    },
+    width=400,
+    height=300,
+  )
+  fig.update_yaxes(range=[0,1])
+
+  return fig
+
+@render_plotly
+def cdf_plot():
+  data = make_df()
+  fig2 = px.scatter(
+    data,
+    x='Events',
+    y='CDF',
+    title='Cumulative Distribution Function',
+    hover_data={'CDF': ':.3f'},
+    labels={
+      'Events': 'No. of Events, k',
+      'CDF': 'P (X ≤ k)'
+    },
+    width=400,
+    height=300,
+  )
+  fig2.update_yaxes(range=[0,1])
+
+  return fig2
+```
+
+:::{.callout-tip}
+When the rate is low, the distribution will be skewed to the right. Observe how as the rate $\lambda$ increases, it becomes less skewed (more symmetric) and looks more like a normal distribution
+:::
+
+
+### References
+*The Poisson Distribution - explained with examples and illustrated using Excel - statistics Help* [Dr. Nic's Maths and Stats](
+https://www.bing.com/videos/riverview/relatedvideo?&q=poisson+distribution&&mid=F0BB062FB189BC546D37F0BB062FB189BC546D37&&FORM=VRDGAR)
+
+*scipy.stats.poisson*, [SciPy API Reference](https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.poisson.html#scipy.stats.poisson)
+
+*Poisson Distribution* [Wikipedia](https://en.wikipedia.org/wiki/Poisson_distribution)

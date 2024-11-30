@@ -18,10 +18,14 @@ website:
     contents:
       - section: "Statistics Topics"
         contents:
-          - text: "Central Limit Theorem"
-            href: clt_dashboard.qmd
           - text: "Binomial Distribution"
             href: binomial_dist.qmd
+          - text: "Poisson Distribution"
+            href: poisson_dist.qmd
+          - text: "Expected Value"
+            href: expected_value.qmd
+          - text: "Central Limit Theorem"
+            href: clt_dashboard.qmd
   back-to-top-navigation: true
 
 format:

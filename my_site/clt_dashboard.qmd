@@ -12,6 +12,7 @@ Add some text to discuss subject.
 
 # Now show the visualization
 
+:::{.column-screen-inset-right}
 ```{shinylive-python}
 #| standalone: true
 #| viewerHeight: 600
@@ -140,3 +141,4 @@ with ui.card():
         def sample_means_output():
             return txt_sample_means()
 ```
+:::
