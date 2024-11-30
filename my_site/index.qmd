@@ -1,0 +1,5 @@
+---
+title: "Notes from Statistical Inference"
+---
+
+The pages of this site use interactive graphics to explore concepts from an Inferential Statistics course.

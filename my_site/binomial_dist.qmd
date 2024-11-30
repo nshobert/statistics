@@ -1,0 +1,163 @@
+---
+title: "Binomial Distribution"
+format: html
+filters: 
+  - shinylive
+---
+If $X$ is a binomial random variable with parameters
+
+* *n*
+* *p*   
+
+then we write:
+$$
+X ~ Bin(n, p)
+$$
+where
+
+* *n* is the number of trials, 
+  +  *e.g. n=10 coin tosses*
+* there are only two possible outcomes of a trial,
+  + *each coin toss can either be Heads or Tails*
+* trials are independent of each other,
+* and the probability of success, *i*, is the same for each trial.
+  + *every coin toss, the probability of getting Heads is always 0.5*
+
+A binomial distribution describes the probabiliy of obtaining *k* successes in *n* binomial experiments.
+The equation for it is
+$$
+P(X=k) = nCk * p^k * (1 - p)^{n-k}
+$$
+
+Note that $nCk$ is the number of ways to obtain *k* success in *n* trials.
+
+The probability of a binomial 
+
+We can use a binomial calculator to answer questions like
+
+* what's the probability that a coin will land on Heads 43 times in 100 trials? 
+  + *p* = 0.5, *n* = 100, *k* = 43
+  + *P(X=43)* = 0.0301
+
+```{shinylive-python}
+#| standalone: true
+#| viewerHeight: 420
+
+from shiny.express import input, render, ui
+from math import factorial
+
+ui.page_opts(title="Binomial Experiments Probability")
+
+ui.input_slider(
+    "p", 
+    "Probability of Success per Trial", 
+    min=0, 
+    max=1, 
+    value=0.5,
+    step=0.1)
+
+ui.input_numeric(
+    "n", 
+    "Number of Trials", 
+    value=100,
+    step=1
+)
+
+ui.input_numeric(
+    "k", 
+    "Number of Success in n Trials",
+    value=43,
+    step=1,
+)
+
+ui.input_action_button("run_calc", "Calculate")
+
+# Define the Binomial probability calculation
+def p_of_x(p, n, k):
+    return factorial(n) / (factorial(n - k) * factorial(k)) * p ** k * (1 - p) ** (n-k)
+
+@render.code
+def txt():
+    # When user clicks "Calculate", calculate binomial probability
+    calculated_p = p_of_x(input.p(), input.n(), input.k()) 
+    return rf"The probabilty P(X = {input.k()}) is {calculated_p:.3}"
+
+
+```
+
+---
+
+   
+
+```{shinylive-python}
+#| standalone: true
+#| viewerHeight: 650
+
+from shiny.express import input, render, ui
+from shiny import reactive
+import pandas as pd
+from math import factorial
+import plotly.express as px
+from shinywidgets import render_plotly
+
+# Title
+ui.h1("Visualizing the Binomial Distribution")
+
+# Description
+ui.markdown(
+    """
+
+  This histogram assumes *n* = 30 trials. Use the slider to change *p*, the probability of success of a single trial, to see its effect on the distribution.
+  """
+)
+
+# Fix the experiment at 30 trials
+n = 30
+
+# Get user inputs for p and k.
+ui.input_slider(
+    "p",
+    "Select p, the probability of success for a trial",
+    min=0,
+    max=1,
+    value=0.5,
+    step=0.05,
+    width='600px',
+    ticks=True
+)
+
+
+# Define the binomial probability function
+def p_of_x(p, n, k):
+    return factorial(n) / (factorial(n - k) * factorial(k)) * p**k * (1 - p) ** (n - k)
+
+
+@reactive.calc
+def calc_df():
+    p = input.p()
+    df = pd.DataFrame({"successes": range(n + 1)})
+    df["probability of successes"] = df["successes"].apply(lambda x: p_of_x(p, n, x))
+    return df
+
+
+@render_plotly
+def binomial_plot():
+    data = calc_df()
+    fig = px.bar(
+        data,
+        x="successes",
+        y="probability of successes",
+        title=f"Binomial Distribtuion of an Experiment with {n} Trials",
+        width=600,
+        height=400,
+        labels={
+            "successes": "No. of Successes, k",
+            "probability of successes": "Probability of Exactly k Successes",
+        },
+        hover_data={'probability of successes': ':.3f'}
+    )
+
+    fig.update_yaxes(range=[0,1])
+
+    return fig
+```

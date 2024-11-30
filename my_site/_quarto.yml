@@ -1,0 +1,31 @@
+project:
+  type: website
+  render:
+  - "*.qmd"
+  - "!ignored.qmd"
+  - "!ignored-dir/"
+
+website:
+  title: "Notes from Statistical Inference"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - section: "Statistics Topics"
+        contents:
+          - text: "Central Limit Theorem"
+            href: clt_dashboard.qmd
+          - text: "Binomial Distribution"
+            href: binomial_dist.qmd
+  back-to-top-navigation: true
+
+format:
+  html:
+    theme: minty
+    css: styles.css
+    toc: false

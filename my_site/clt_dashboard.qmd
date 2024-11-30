@@ -1,0 +1,142 @@
+---
+title: "Central Limit Theorem"
+format: html
+page-navigation: false
+filters: 
+  - shinylive
+---
+
+# Here's a Title
+
+Add some text to discuss subject.
+
+# Now show the visualization
+
+```{shinylive-python}
+#| standalone: true
+#| viewerHeight: 600
+
+from shiny.express import input, render, ui
+from shiny import reactive
+from shinywidgets import render_plotly
+
+import pandas as pd
+#from numpy.random import uniform, pareto
+from numpy import random
+import plotly.figure_factory as ff
+import scipy.stats # A depenency of ff
+
+ui.page_opts(title="Visualizing the Central Limit Theorem")
+
+with ui.sidebar(bg="f8f8f8"):
+    ui.input_select(
+        "distribution",
+        "Select distribution",
+        choices=["Uniform", "Pareto"],
+        selected="Uniform",
+    )
+    ui.input_select(
+        "sample_size", 
+        "Select sample size", 
+        choices=["2", "10", "100"], 
+        selected="2"
+    )
+    ui.input_action_button("take_sample", "Take sample")
+
+# Initialize sample_means, a list of sample means for plotting
+sample_means = reactive.value([])
+
+rng = random.default_rng()
+
+@reactive.calc
+def get_population():
+    # Generate a population according to the selected distribution and cache it.
+    print("Running get_population")
+    selected = input.distribution()
+    if selected == "Uniform":
+        population = random.uniform(low=0, high=1, size=1000)
+    elif selected == "Pareto":
+        population = random.pareto(a=3, size=1000)
+    return population
+
+@reactive.effect
+@reactive.event(input.distribution)
+def reset_sample_means():
+    # Reset the sample_means() if a new distribution is selected.
+    print("Resetting sample means")  # Debug log
+    sample_means.set([])  # Clear the sample means
+
+@reactive.effect
+@reactive.event(input.take_sample)
+def update_sample_means():
+    # Take a random sample from the cached population and return its mean
+    population = get_population()
+    sample_size = int(input.sample_size())
+    sample = rng.choice(population, size=sample_size, replace=True)
+    sample_mean = sample.mean() 
+    
+    # Add the sample mean of a new random sample from the cached population
+    x = sample_means().copy()
+    x.append(sample_mean)
+    sample_means.set(x) # Updates reactive value, does not take a set
+    print("Updated sample means: ", x)
+    
+def txt_sample_means():
+    means = sample_means()
+    formatted_means = [f"{mean:.3g}" for mean in means]
+    return f"Sample means: \n{formatted_means}"
+
+with ui.card():
+    with ui.layout_columns(col_widths=[6,6]):
+        with ui.card():
+            # View the population
+    
+            @render_plotly
+            def dist_plot():
+                x = [get_population()]
+    
+                fig = ff.create_distplot(
+                    x,
+                    group_labels=["probability density"],
+                    bin_size=0.05,
+                    colors=["#A6ACEC"],
+                    show_rug=False,
+                )
+                fig.update_layout(
+                    title_text=f"A {input.distribution()} Distributed Population",
+                    yaxis_title_text="Probability Density",
+                    xaxis_title_text="Value",
+                    showlegend=False
+                )
+                return fig
+    
+        with ui.card():
+            "Sampling Distribution Histogram"
+    
+            @render_plotly
+            @reactive.event(input.take_sample)
+            def hist_plot():
+                # get the new sample_means since the take_sample button was pushed
+                x = sample_means()
+            
+                fig = ff.create_distplot(
+                    [x],
+                    group_labels=["sampling means"],
+                    bin_size=0.03,
+                    colors=['#A6ACEC'],
+                    #curve_type='normal', # override the kde default
+                    show_rug=False,
+                )
+                fig.update_layout(
+                    yaxis_title_text="Count",
+                    xaxis_title_text="Sample Mean",
+                    showlegend=False,
+                    xaxis_range=[0,1]
+                )
+                return fig
+
+    with ui.card_footer():
+        @render.text
+        def sample_means_output():
+            return txt_sample_means()
+```
