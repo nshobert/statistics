@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Central Limit Theorem – Notes from Statistical Inference</title>
+<title>Poisson Distribution – Notes from Statistical Inference</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -72,6 +72,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -112,7 +141,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./binomial_dist.html">Statistics Topics</a></li><li class="breadcrumb-item"><a href="./clt_dashboard.html">Central Limit Theorem</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./binomial_dist.html">Statistics Topics</a></li><li class="breadcrumb-item"><a href="./poisson_dist.html">Poisson Distribution</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -149,7 +178,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./poisson_dist.html" class="sidebar-item-text sidebar-link">
+  <a href="./poisson_dist.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Poisson Distribution</span></a>
   </div>
 </li>
@@ -161,7 +190,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./clt_dashboard.html" class="sidebar-item-text sidebar-link active">
+  <a href="./clt_dashboard.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Central Limit Theorem</span></a>
   </div>
 </li>
@@ -174,11 +203,11 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./binomial_dist.html">Statistics Topics</a></li><li class="breadcrumb-item"><a href="./clt_dashboard.html">Central Limit Theorem</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./binomial_dist.html">Statistics Topics</a></li><li class="breadcrumb-item"><a href="./poisson_dist.html">Poisson Distribution</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Central Limit Theorem</h1>
+<h1 class="title">Poisson Distribution</h1>
 </div>
 
 
@@ -195,145 +224,182 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="heres-a-title" class="level1">
-<h1>Here’s a Title</h1>
-<p>Add some text to discuss subject.</p>
+<section id="the-poisson-distribution" class="level1">
+<h1>The Poisson Distribution</h1>
+<p>Use a Poisson distribution when you want to model how likely it is for discrete or individual events to happen in a given period of time.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Individual events are <em>discrete</em> and <em>independent</em></p>
+</div>
+</div>
+<section id="examples" class="level2">
+<h2 class="anchored" data-anchor-id="examples">Examples</h2>
+<ul>
+<li>queuing: (waitin lines/ queuing) - the number of people arriving in a given time period, jobs to a print queue…</li>
+<li>earthquake occurence:</li>
+<li>number of potholes in a length of road</li>
+<li>number of gummies in a pouch of gummies</li>
+</ul>
 </section>
-<section id="now-show-the-visualization" class="level1 page-columns page-full">
-<h1>Now show the visualization</h1>
-<div class="column-screen-inset-right">
+<section id="parameters" class="level2">
+<h2 class="anchored" data-anchor-id="parameters">Parameters</h2>
+<p><span class="math inline">\(\lambda\)</span>: the number of events per time period (a rate)</p>
+<ul>
+<li><span class="math inline">\(\lambda\)</span> is also the mean and the variance</li>
+<li><span class="math inline">\(\sqrt\lambda\)</span> is the standard deviation</li>
+</ul>
+</section>
+<section id="how-to-know-when-to-use-it" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-know-when-to-use-it">How to know when to use it</h2>
+<p>We can use this to ask either:</p>
+<ul>
+<li>what is the probability that exactly some number of events will occur in a given time period? (discrete) or</li>
+<li>what is the probability that some number or fewer events will occur in a given time period? (cumulative)</li>
+</ul>
+</section>
+<section id="requirements-and-assumptions" class="level2">
+<h2 class="anchored" data-anchor-id="requirements-and-assumptions">Requirements and Assumptions</h2>
+<ul>
+<li>individual events cannot happen at the same time</li>
+<li>individual events are independent</li>
+<li>the probality that an event occurs does not depend on how long it has been since the last event.</li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The thrid assumption is often where the Poisson process breaks down. For example, aftershocks have a time dependence, and some evidence suggests that the probability that an earthquake occurs <em>does</em> depend on how long it has been since the last earthquake. The idea is that after an earthquake, there is a time dependence to the build up of energy needed to release another earthquake.</p>
+</div>
+</div>
+<p>Make sure that when applying a Poisson Distribution to a problem,</p>
+<ol type="1">
+<li>The rate <span class="math inline">\(\lambda\)</span> matches the time period of interest</li>
+<li>Consider whether you’re interested in the probability of an event or the cumulative probability of a range of events</li>
+<li>Pay attention to whether or not you want to include or exclude the boundary value (e.g.&nbsp;P(X <span class="math inline">\(\leq\)</span> 3) or P(X &lt; 3)</li>
+</ol>
+</section>
+<section id="visualize-the-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="visualize-the-distribution">Visualize the Distribution</h2>
+<p>the interactive plot should use a fixed time period and explore the effect of changing the rate (base rate). It would have n occurences on the x axis and P on the y axis. can be a bar plot.</p>
+<p>We can look at the PMF to understand the probability of observing exactly <em>k</em> events in a fixed interval of time or space: <span class="math display">\[
+P(X = k) = \frac{ \lambda^k e^{-\lambda}}{k!}
+\]</span></p>
+<p>We can look at the CDF to understand the probability of observing up to <em>k</em> events: <span class="math display">\[
+F(X \leq k) = \sum_{i=0}^{k} \frac{\lambda^i e^{-\lambda}}{i!}
+\]</span></p>
+<p>Use the slider to change the rate λ to see its effect on the PDF and CDF:</p>
 <pre class="shinylive-python" data-engine="python"><code>#| '!! shinylive warning !!': |
 #|   shinylive does not work in self-contained HTML documents.
 #|   Please set `embed-resources: false` in your metadata.
 #| standalone: true
-#| viewerHeight: 600
-
-from shiny.express import input, render, ui
+#| viewerHeight: 660
+from shiny.express import ui, render, input
 from shiny import reactive
+import pandas as pd
+from scipy.stats import poisson
+import plotly.express as px
 from shinywidgets import render_plotly
 
-import pandas as pd
-#from numpy.random import uniform, pareto
-from numpy import random
-import plotly.figure_factory as ff
-import scipy.stats # A depenency of ff
+# Set number of events in backend
+k = 20
 
-ui.page_opts(title="Visualizing the Central Limit Theorem")
+# Get lambda from user
+ui.input_slider(
+  "users_lambda",
+  "Select λ",
+  min=1,
+  max=10,
+  value=1,
+  step=1,
+  width='400px',
+  ticks=True
+)
 
-with ui.sidebar(bg="f8f8f8"):
-    ui.input_select(
-        "distribution",
-        "Select distribution",
-        choices=["Uniform", "Pareto"],
-        selected="Uniform",
-    )
-    ui.input_select(
-        "sample_size", 
-        "Select sample size", 
-        choices=["2", "10", "100"], 
-        selected="2"
-    )
-    ui.input_action_button("take_sample", "Take sample")
-
-# Initialize sample_means, a list of sample means for plotting
-sample_means = reactive.value([])
-
-rng = random.default_rng()
-
+# Create a dataframe to plot
 @reactive.calc
-def get_population():
-    # Generate a population according to the selected distribution and cache it.
-    print("Running get_population")
-    selected = input.distribution()
-    if selected == "Uniform":
-        population = random.uniform(low=0, high=1, size=1000)
-    elif selected == "Pareto":
-        population = random.pareto(a=3, size=1000)
-    return population
+def make_df():
+  users_lambda = input.users_lambda()
+  df = pd.DataFrame({"Events": range(1, k + 1)})
+  df['PMF'] = df["Events"].apply(lambda x: poisson.pmf(x, users_lambda))
+  df['CDF'] = df["Events"].apply(lambda x: poisson.cdf(x, users_lambda))
+  return df
 
-@reactive.effect
-@reactive.event(input.distribution)
-def reset_sample_means():
-    # Reset the sample_means() if a new distribution is selected.
-    print("Resetting sample means")  # Debug log
-    sample_means.set([])  # Clear the sample means
+# Plot the PMF and CDF
+@render_plotly
+def pmf_plot():
+  data = make_df()
+  fig = px.scatter(
+    data,
+    x='Events',
+    y='PMF',
+    title="Probability Mass Function",
+    hover_data={'PMF': ':.3f'},
+    labels={
+      "Events": "No. of Events, k",
+      "PMF": "P (X = k)"
+    },
+    width=400,
+    height=300,
+  )
+  fig.update_yaxes(range=[0,1])
 
-@reactive.effect
-@reactive.event(input.take_sample)
-def update_sample_means():
-    # Take a random sample from the cached population and return its mean
-    population = get_population()
-    sample_size = int(input.sample_size())
-    sample = rng.choice(population, size=sample_size, replace=True)
-    sample_mean = sample.mean() 
-    
-    # Add the sample mean of a new random sample from the cached population
-    x = sample_means().copy()
-    x.append(sample_mean)
-    sample_means.set(x) # Updates reactive value, does not take a set
-    print("Updated sample means: ", x)
-    
-def txt_sample_means():
-    means = sample_means()
-    formatted_means = [f"{mean:.3g}" for mean in means]
-    return f"Sample means: \n{formatted_means}"
+  return fig
 
-with ui.card():
-    with ui.layout_columns(col_widths=[6,6]):
-        with ui.card():
-            # View the population
-    
-            @render_plotly
-            def dist_plot():
-                x = [get_population()]
-    
-                fig = ff.create_distplot(
-                    x,
-                    group_labels=["probability density"],
-                    bin_size=0.05,
-                    colors=["#A6ACEC"],
-                    show_rug=False,
-                )
-                fig.update_layout(
-                    title_text=f"A {input.distribution()} Distributed Population",
-                    yaxis_title_text="Probability Density",
-                    xaxis_title_text="Value",
-                    showlegend=False
-                )
-                return fig
-    
-        with ui.card():
-            "Sampling Distribution Histogram"
-    
-            @render_plotly
-            @reactive.event(input.take_sample)
-            def hist_plot():
-                # get the new sample_means since the take_sample button was pushed
-                x = sample_means()
-            
-                fig = ff.create_distplot(
-                    [x],
-                    group_labels=["sampling means"],
-                    bin_size=0.03,
-                    colors=['#A6ACEC'],
-                    #curve_type='normal', # override the kde default
-                    show_rug=False,
-                )
-                fig.update_layout(
-                    yaxis_title_text="Count",
-                    xaxis_title_text="Sample Mean",
-                    showlegend=False,
-                    xaxis_range=[0,1]
-                )
-                return fig
+@render_plotly
+def cdf_plot():
+  data = make_df()
+  fig2 = px.scatter(
+    data,
+    x='Events',
+    y='CDF',
+    title='Cumulative Distribution Function',
+    hover_data={'CDF': ':.3f'},
+    labels={
+      'Events': 'No. of Events, k',
+      'CDF': 'P (X ≤ k)'
+    },
+    width=400,
+    height=300,
+  )
+  fig2.update_yaxes(range=[0,1])
 
-    with ui.card_footer():
-        @render.text
-        def sample_means_output():
-            return txt_sample_means()</code></pre>
+  return fig2</code></pre>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When the rate is low, the distribution will be skewed to the right. Observe how as the rate <span class="math inline">\(\lambda\)</span> increases, it becomes less skewed (more symmetric) and looks more like a normal distribution</p>
+</div>
+</div>
+<section id="references" class="level3">
+<h3 class="anchored" data-anchor-id="references">References</h3>
+<p><em>The Poisson Distribution - explained with examples and illustrated using Excel - statistics Help</em> <a href="https://www.bing.com/videos/riverview/relatedvideo?&amp;q=poisson+distribution&amp;&amp;mid=F0BB062FB189BC546D37F0BB062FB189BC546D37&amp;&amp;FORM=VRDGAR">Dr.&nbsp;Nic’s Maths and Stats</a></p>
+<p><em>scipy.stats.poisson</em>, <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.poisson.html#scipy.stats.poisson">SciPy API Reference</a></p>
+<p><em>Poisson Distribution</em> <a href="https://en.wikipedia.org/wiki/Poisson_distribution">Wikipedia</a></p>
 
 
+</section>
+</section>
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->

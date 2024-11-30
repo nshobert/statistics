@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://nshobert.github.io/statistics/index.html</loc>
-    <lastmod>2024-11-29T22:35:36.459Z</lastmod>
+    <loc>https://nshobert.github.io/statistics/poisson_dist.html</loc>
+    <lastmod>2024-11-30T02:01:02.766Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nshobert.github.io/statistics/expected_value.html</loc>
+    <lastmod>2024-11-30T02:03:59.869Z</lastmod>
   </url>
   <url>
     <loc>https://nshobert.github.io/statistics/binomial_dist.html</loc>
@@ -14,6 +18,10 @@
   </url>
   <url>
     <loc>https://nshobert.github.io/statistics/clt_dashboard.html</loc>
-    <lastmod>2024-11-30T00:05:23.026Z</lastmod>
+    <lastmod>2024-11-30T02:30:05.879Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nshobert.github.io/statistics/index.html</loc>
+    <lastmod>2024-11-29T22:35:36.459Z</lastmod>
   </url>
 </urlset>

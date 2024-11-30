@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Central Limit Theorem – Notes from Statistical Inference</title>
+<title>Expected Value – Notes from Statistical Inference</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -72,6 +72,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -112,7 +141,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./binomial_dist.html">Statistics Topics</a></li><li class="breadcrumb-item"><a href="./clt_dashboard.html">Central Limit Theorem</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./binomial_dist.html">Statistics Topics</a></li><li class="breadcrumb-item"><a href="./expected_value.html">Expected Value</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -155,13 +184,13 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./expected_value.html" class="sidebar-item-text sidebar-link">
+  <a href="./expected_value.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Expected Value</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./clt_dashboard.html" class="sidebar-item-text sidebar-link active">
+  <a href="./clt_dashboard.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Central Limit Theorem</span></a>
   </div>
 </li>
@@ -174,11 +203,11 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./binomial_dist.html">Statistics Topics</a></li><li class="breadcrumb-item"><a href="./clt_dashboard.html">Central Limit Theorem</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./binomial_dist.html">Statistics Topics</a></li><li class="breadcrumb-item"><a href="./expected_value.html">Expected Value</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Central Limit Theorem</h1>
+<h1 class="title">Expected Value</h1>
 </div>
 
 
@@ -195,143 +224,83 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="heres-a-title" class="level1">
-<h1>Here’s a Title</h1>
-<p>Add some text to discuss subject.</p>
+<section id="what-are-expectaions" class="level1">
+<h1>What are expectaions?</h1>
+<p>Expected value in statistics is simply the value you’d expect to get if you ran an experiment a bunch of times. It’s sort of interchanged with mean and first moment, but it can be thought of as a weighted average. It’s the sum of the probability of an outcome times the value of the outcome for all possible outcomes. An example (by Statistics by Jim) is if a contestant on a game show has a 50% chance of winning $100, 40% chance of $500, or 10% chance of losing <span class="math inline">\(100, then the expected value from a bunch of contestants playing would be:\)</span>$ 0.5 * 100 + 0.4 * 500 + .1 * (-100) = <span class="math inline">\(240\)</span>$</p>
+<p><a href="https://statisticsbyjim.com/probability/expected-value/">source</a></p>
 </section>
-<section id="now-show-the-visualization" class="level1 page-columns page-full">
-<h1>Now show the visualization</h1>
-<div class="column-screen-inset-right">
+<section id="visualize-what-they-look-like-in-a-distribution-plot" class="level1">
+<h1>Visualize what they look like in a distribution plot</h1>
+<p>Basic idea: 1. user select continuous distribution (normal, gamma (which reduces to exponential, and beta? geomteric?)) 2. user select mean with slider 1 3. user select variance with slider 2 4. use scipy stats to generate random variates 5. plot the distribution 6. output the skew and kurtosis (should be 0 and 0 for normal, more interesting for gamma, etc.)</p>
 <pre class="shinylive-python" data-engine="python"><code>#| '!! shinylive warning !!': |
 #|   shinylive does not work in self-contained HTML documents.
 #|   Please set `embed-resources: false` in your metadata.
 #| standalone: true
-#| viewerHeight: 600
-
+#| viewerHeight: 660
 from shiny.express import input, render, ui
 from shiny import reactive
+import pandas as pd
+from scipy.stats import norm, gamma, geom
+import plotly.express as px
 from shinywidgets import render_plotly
 
-import pandas as pd
-#from numpy.random import uniform, pareto
-from numpy import random
-import plotly.figure_factory as ff
-import scipy.stats # A depenency of ff
+# Show user a dropdown to select the distribution
+ui.input_select(
+    id='distribution',
+    label='Select distribution:',
+    choices=[
+        'Normal',
+        'Gamma',
+        'Geometric'
+    ],
+    selected='Normal',
+    width='200px'   
+)
 
-ui.page_opts(title="Visualizing the Central Limit Theorem")
+# Show user sliders for mean and variance
+ui.input_slider(
+    id='firstmoment',
+    label='Select the first moment: ',
+    min=0,
+    max=100,
+    value=10,
+    step=1
+)
+ui.input_slider(
+    id='secondmoment',
+    label='Select the second moment:',
+    min=0,
+    max=10,
+    value=10,
+    step=1
+)
 
-with ui.sidebar(bg="f8f8f8"):
-    ui.input_select(
-        "distribution",
-        "Select distribution",
-        choices=["Uniform", "Pareto"],
-        selected="Uniform",
-    )
-    ui.input_select(
-        "sample_size", 
-        "Select sample size", 
-        choices=["2", "10", "100"], 
-        selected="2"
-    )
-    ui.input_action_button("take_sample", "Take sample")
-
-# Initialize sample_means, a list of sample means for plotting
-sample_means = reactive.value([])
-
-rng = random.default_rng()
-
+# Helper functions to generate random variates based on
 @reactive.calc
-def get_population():
-    # Generate a population according to the selected distribution and cache it.
-    print("Running get_population")
-    selected = input.distribution()
-    if selected == "Uniform":
-        population = random.uniform(low=0, high=1, size=1000)
-    elif selected == "Pareto":
-        population = random.pareto(a=3, size=1000)
-    return population
+def get_normal_data():
+    mean = input.firstmoment()
+    std_dev = input.secondmoment()
+    data = norm.rvs(loc=mean, scale=std_dev, size=1000)
+    data_df = pd.DataFrame(data, columns=['Value'])
+    skew, kurtosis = 0, 0 # always for normal distribution
+    return data_df, skew, kurtosis
+ 
+# Plot the data as histogram with fit line
+@render_plotly
+def plot_hist():
+    if input.distribution() == 'Normal':
+        # get normal data
+        data, skew, kurt = get_normal_data()
+        fig = px.histogram(data, x="Value",title="Normal Distribution", nbins=30)
+        fig.update_xaxes(range=[1,100])
+        return fig
+    if input.distribution() == 'Gamma':
+        pass
+    if input.distribtuion() == 'Geometric':
+        pass
 
-@reactive.effect
-@reactive.event(input.distribution)
-def reset_sample_means():
-    # Reset the sample_means() if a new distribution is selected.
-    print("Resetting sample means")  # Debug log
-    sample_means.set([])  # Clear the sample means
-
-@reactive.effect
-@reactive.event(input.take_sample)
-def update_sample_means():
-    # Take a random sample from the cached population and return its mean
-    population = get_population()
-    sample_size = int(input.sample_size())
-    sample = rng.choice(population, size=sample_size, replace=True)
-    sample_mean = sample.mean() 
-    
-    # Add the sample mean of a new random sample from the cached population
-    x = sample_means().copy()
-    x.append(sample_mean)
-    sample_means.set(x) # Updates reactive value, does not take a set
-    print("Updated sample means: ", x)
-    
-def txt_sample_means():
-    means = sample_means()
-    formatted_means = [f"{mean:.3g}" for mean in means]
-    return f"Sample means: \n{formatted_means}"
-
-with ui.card():
-    with ui.layout_columns(col_widths=[6,6]):
-        with ui.card():
-            # View the population
-    
-            @render_plotly
-            def dist_plot():
-                x = [get_population()]
-    
-                fig = ff.create_distplot(
-                    x,
-                    group_labels=["probability density"],
-                    bin_size=0.05,
-                    colors=["#A6ACEC"],
-                    show_rug=False,
-                )
-                fig.update_layout(
-                    title_text=f"A {input.distribution()} Distributed Population",
-                    yaxis_title_text="Probability Density",
-                    xaxis_title_text="Value",
-                    showlegend=False
-                )
-                return fig
-    
-        with ui.card():
-            "Sampling Distribution Histogram"
-    
-            @render_plotly
-            @reactive.event(input.take_sample)
-            def hist_plot():
-                # get the new sample_means since the take_sample button was pushed
-                x = sample_means()
-            
-                fig = ff.create_distplot(
-                    [x],
-                    group_labels=["sampling means"],
-                    bin_size=0.03,
-                    colors=['#A6ACEC'],
-                    #curve_type='normal', # override the kde default
-                    show_rug=False,
-                )
-                fig.update_layout(
-                    yaxis_title_text="Count",
-                    xaxis_title_text="Sample Mean",
-                    showlegend=False,
-                    xaxis_range=[0,1]
-                )
-                return fig
-
-    with ui.card_footer():
-        @render.text
-        def sample_means_output():
-            return txt_sample_means()</code></pre>
-</div>
+# show skew and kurtosis in value box?
+</code></pre>
 
 
 </section>
