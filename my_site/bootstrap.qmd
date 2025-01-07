@@ -1,0 +1,8 @@
+---
+title: "Statistical Functions and The Bootstrap"
+format: html
+page-navigation: false
+filters: 
+  - shinylive
+---
+

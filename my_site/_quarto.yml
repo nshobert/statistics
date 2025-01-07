@@ -26,6 +26,20 @@ website:
             href: expected_value.qmd
           - text: "Central Limit Theorem"
             href: clt_dashboard.qmd
+          - text: "Conditional Expectation and Conditional Distribution"
+            href: conditional.qmd
+          - text: "Correlation, Prediction, and Regression"
+            href: regression.qmd
+          - text: "Estimators"
+            href: estimators.qmd
+          - text: "Multinomial Distrimbution"
+            href: multinomial.qmd
+          - text: "Linear Models and Multivariate Normal Distributions"
+            href: linear.qmd
+          - text: "Order Statistics: Continuous Univariate Distributions"
+            href: orderstats.qmd
+          - text: "Statistical Functions and The Bootstrap"
+            href: bootstrap.qmd
   back-to-top-navigation: true
 
 format:

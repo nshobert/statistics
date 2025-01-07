@@ -1,0 +1,7 @@
+---
+title: "Multinomial Distribution"
+format: html
+page-navigation: false
+filters: 
+  - shinylive
+---

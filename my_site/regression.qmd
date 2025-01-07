@@ -1,0 +1,7 @@
+---
+title: "Correlation, Prediction, and Regression"
+format: html
+page-navigation: false
+filters: 
+  - shinylive
+---

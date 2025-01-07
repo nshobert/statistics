@@ -1,0 +1,7 @@
+---
+title: "Linear Models and Multivariate Normal Distributions"
+format: html
+page-navigation: false
+filters: 
+  - shinylive
+---
