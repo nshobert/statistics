@@ -1,27 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://nshobert.github.io/statistics/poisson_dist.html</loc>
-    <lastmod>2024-11-30T02:01:02.766Z</lastmod>
+    <loc>https://nshobert.github.io/statistics/regression.html</loc>
+    <lastmod>2025-02-12T03:36:06.360Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nshobert.github.io/statistics/orderstats.html</loc>
+    <lastmod>2025-02-12T03:36:06.355Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nshobert.github.io/statistics/linear.html</loc>
+    <lastmod>2025-02-12T03:36:06.355Z</lastmod>
   </url>
   <url>
     <loc>https://nshobert.github.io/statistics/expected_value.html</loc>
     <lastmod>2024-11-30T02:03:59.869Z</lastmod>
   </url>
   <url>
-    <loc>https://nshobert.github.io/statistics/binomial_dist.html</loc>
-    <lastmod>2024-11-30T00:07:46.422Z</lastmod>
+    <loc>https://nshobert.github.io/statistics/conditional.html</loc>
+    <lastmod>2025-02-12T03:36:06.355Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nshobert.github.io/statistics/bootstrap.html</loc>
+    <lastmod>2025-02-12T03:36:06.355Z</lastmod>
   </url>
   <url>
     <loc>https://nshobert.github.io/statistics/about.html</loc>
     <lastmod>2024-11-30T00:07:30.647Z</lastmod>
   </url>
   <url>
+    <loc>https://nshobert.github.io/statistics/binomial_dist.html</loc>
+    <lastmod>2024-11-30T00:07:46.422Z</lastmod>
+  </url>
+  <url>
     <loc>https://nshobert.github.io/statistics/clt_dashboard.html</loc>
     <lastmod>2024-11-30T02:30:05.879Z</lastmod>
   </url>
   <url>
+    <loc>https://nshobert.github.io/statistics/estimators.html</loc>
+    <lastmod>2025-02-12T03:36:06.355Z</lastmod>
+  </url>
+  <url>
     <loc>https://nshobert.github.io/statistics/index.html</loc>
     <lastmod>2024-11-29T22:35:36.459Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nshobert.github.io/statistics/multinomial.html</loc>
+    <lastmod>2025-02-12T03:36:06.355Z</lastmod>
+  </url>
+  <url>
+    <loc>https://nshobert.github.io/statistics/poisson_dist.html</loc>
+    <lastmod>2024-11-30T02:01:02.766Z</lastmod>
   </url>
 </urlset>
